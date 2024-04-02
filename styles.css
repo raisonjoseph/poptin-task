@@ -1,0 +1,503 @@
+:root {
+  --text-color: #212121;
+  --green: #3c843e;
+}
+
+* {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+  font-family: Poppins, sans-serif;
+}
+
+body{
+  min-height: 100vh;
+  margin: 0px;
+}
+
+html.modal-active, body.modal-active {
+  overflow: hidden;
+}
+
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* UI Elements */
+
+.btn {
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px -4px rgba(0, 0, 0,.7);
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease-in-out  ;
+}
+.btn:hover {
+  box-shadow: 0 10px 10px -10px rgba(0, 0, 0,.7);
+}
+.btn.green {
+  background: var(--green);
+  color: white;
+  min-width: 160px;
+}
+.btn.preview {
+  background: #3A3A3C;
+  color: white
+}
+
+/* Editor */
+
+.editor-container {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-wrap: wrap;  
+}
+
+
+.editor-content{
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+
+.editor-elements {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 1.5rem;
+  user-select: none;
+}
+
+.editor-element {
+  width: 100%;
+  height: 48px;
+  max-width: 240px;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Editor end  */
+
+/* Popup */
+
+.popup {
+  width: 496px;
+  height: 496px;
+  position: relative;
+  border-radius: 50%;
+  background-color: #E17A5F;
+  overflow: hidden;
+}
+.popup::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  height: 95%;
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+.popup-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.popup-content.editor-highlight {
+  opacity: 0.5;
+}
+
+.popup-element{
+  width: 100%;
+  position: absolute;
+  box-sizing: border-box;
+  padding: 0px 75px;
+  text-align: center;
+}
+
+.popup-element:not(.button) {
+  cursor: grab;
+}
+
+.popup-element.custom {
+  max-width: 100%;
+  width: max-content !important;
+  padding: 0px !important;
+}
+
+.popup-element.custom .delete{
+  position:absolute;
+  top: -12px;
+  right: -12px;
+  background-color: #212121;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.25s ease-in-out;
+}
+
+.popup-element.custom:hover .delete{
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+.popup-element.custom .button{
+  max-width: 100%;
+  width: max-content !important;
+  padding: 0px !important;
+}
+
+:not(.popup-content) > .popup-element.ui-draggable-dragging {
+  z-index: 1000;
+  width: max-content !important;
+  padding: 0px !important;
+}
+
+.popup-element.stars {
+  top:51px
+}
+
+.popup-element.image {
+  width: 156px !important;
+  height: 156px;
+}
+
+.popup-element img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+
+.popup-element.title {
+  width: 100%;
+  font-family: Poppins;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 32px;
+  text-align: center;
+  top:127px;
+  color: white;
+}
+
+.popup-element.title span {
+  display: block;
+}
+
+.popup-element.input {
+  top: 240px;
+}
+
+
+.popup-element input {
+  background-color: white;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  padding: 12px 16px;
+  width: 100%;
+  font-size: 18px;
+}
+
+.popup-element input::placeholder {
+  color: #949698;
+}
+
+.popup-element.hint {
+  top: 380px;
+}
+.popup-element.button {
+  top: 306px;
+}
+
+.modal .popup {
+  overflow: hidden;
+}
+
+
+.btn-dark {
+  background: #3A3A3C;
+  color: white;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 30px;
+  text-align: left;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.hint{
+  font-family: Poppins;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22.5px;
+  text-align: center;
+  color: white;
+}
+
+.popup .btn:hover {
+  background: #1D1D1F;
+}
+
+/* Popup End */
+
+
+/* Modal */
+
+#modal-container {
+  position: fixed;
+  display: table;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  transform: scale(0);
+  z-index: 1;
+}
+
+#modal-container.two {
+  transform: scale(1);
+}
+#modal-container.two .modal-background {
+  background: rgba(0, 0, 0, 0);
+  animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#modal-container.two .modal-background .modal {
+  opacity: 0;
+  animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#modal-container.two + .content {
+  animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#modal-container.two.out {
+  animation: quickScaleDown 0s 0.5s linear forwards;
+}
+#modal-container.two.out .modal-background {
+  animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#modal-container.two.out .modal-background .modal {
+  animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+#modal-container.two.out + .content {
+  animation: scaleForward 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+#modal-container .modal-background {
+  display: table-cell;
+  background: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  vertical-align: middle;
+}
+#modal-container .modal-background .modal {
+  display: inline-block;
+}
+
+/* Modal End */
+
+/* Media Queries */
+
+
+@media (max-width: 768px){
+    .editor{
+      padding: 0px;
+      width: 100%;
+    }
+    .popup {
+      width: 460px;
+      height: 460px;
+    }
+    .popup-element{
+      padding-left: 85px;
+      padding-right: 85px;
+    }
+    .popup-element.stars {
+      top: 36px;
+    }
+    .popup-element.stars svg{
+      height: 52px;
+    }
+    .popup-element.title {
+      top: 110px;
+      font-size: 20px;
+      line-height: 28px;
+    }
+    .popup-element.input {
+      top: 210px;
+    }
+    .popup-element.hint {
+      top: 346px;
+    }
+    .popup-element.button {
+      top: 276px;
+    }
+}
+
+@media (max-width: 567px){
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .editor{
+    padding: 0px;
+  }
+  .popup {
+    aspect-ratio: 1;
+    width: 100%;
+    min-width: 324px;
+    max-width: 340px;
+    height: auto;
+  }
+  .modal .popup {
+    min-width: 340px;
+  }
+  .popup-element{
+    padding-left: 52px;
+    padding-right: 52px;
+  }
+  .popup-element.stars {
+    top: 24px;
+  }
+  .popup-element.stars svg{
+    width: 108px;
+    height: 36px;
+  }
+  .popup-element.title {
+    top: 70px;
+    font-size: 16px;
+    line-height:normal;
+  }
+  .popup-element.input {
+    top: 152px;
+  }
+  .popup-element input {
+    padding: 10px 14px;
+    font-size: 16px;
+    border-radius: 6px;
+  }
+
+  .popup-element.hint {
+    top: 250px;
+    font-size: 12px;
+    text-align: center;
+  }
+  .popup-element.button {
+    top: 204px;
+  }
+
+  .popup-element .btn-dark {
+    padding: 10px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}
+
+/* Media Queries End */
+
+
+/*  Animations */
+
+
+@keyframes fadeIn {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+@keyframes fadeOut {
+  0% {
+    background: rgba(0, 0, 0, 0.7);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0);
+  }
+}
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.8) translateY(1000px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+}
+@keyframes scaleDown {
+  0% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) translateY(1000px);
+    opacity: 0;
+  }
+}
+@keyframes scaleBack {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.85);
+  }
+}
+@keyframes scaleForward {
+  0% {
+    transform: scale(0.85);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes quickScaleDown {
+  0% {
+    transform: scale(1);
+  }
+  99.9% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+/* Animations End */
