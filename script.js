@@ -268,6 +268,7 @@ $(function () {
         }
     })
 
+    // Add click event to the popup content to enable editing
     $(document).on("click", ".editor .popup-element span:not(.delete)", function () {
         $(this).attr("contenteditable", true).trigger('focus');
         // Move caret to end of the text
@@ -286,6 +287,7 @@ $(function () {
             parent.draggable('disable')
     });
 
+    // Add focusout event to the popup content to disable editing
     $(document).on("focusout", ".editor .popup-element span:not(.delete)", function () {
         $this = $(this)
         $this.attr("contenteditable", false)
