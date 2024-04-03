@@ -16,6 +16,10 @@ body{
   margin: 0px;
 }
 
+[contenteditable="true"] {
+  outline: 1px solid var(--border-color);
+}
+
 html.modal-active, body.modal-active {
   overflow: hidden;
 }
@@ -49,6 +53,9 @@ html.modal-active, body.modal-active {
   font-size: 16px;
   cursor: pointer;
   transition: all 0.25s ease-in-out  ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .btn:hover {
   box-shadow: 0 10px 10px -10px rgba(0, 0, 0,.7);
@@ -208,10 +215,6 @@ hr {
   text-align: center;
 }
 
-.popup-element:not(.button) {
-  cursor: grab;
-}
-
 .popup-element.custom {
   max-width: 100%;
   width: max-content !important;
@@ -270,7 +273,6 @@ hr {
   background-color: #eee;
 }
 
-
 .popup-element.title {
   width: 100%;
   font-family: Poppins;
@@ -289,7 +291,6 @@ hr {
 .popup-element.input {
   top: 240px;
 }
-
 
 .popup-element input {
   background-color: white;
@@ -310,6 +311,12 @@ hr {
 }
 .popup-element.button {
   top: 306px;
+}
+
+.popup-element.button span{
+  display: block;
+  height: 28px;
+  width: fit-content  ;
 }
 
 .modal .popup {
@@ -462,11 +469,11 @@ hr {
 }
 
 @media (max-width: 567px){
-  .container {
-  }
+
   .editor{
     padding: 0px;
   }
+  
   .popup {
     aspect-ratio: 1;
     width: 100%;
@@ -474,28 +481,35 @@ hr {
     max-width: 340px;
     height: auto;
   }
+
   .modal .popup {
     min-width: 340px;
   }
+
   .popup-element{
     padding-left: 52px;
     padding-right: 52px;
   }
+
   .popup-element.stars {
     top: 24px;
   }
+
   .popup-element.stars svg{
     width: 108px;
     height: 36px;
   }
+
   .popup-element.title {
     top: 70px;
     font-size: 16px;
     line-height:normal;
   }
+
   .popup-element.input {
     top: 152px;
   }
+
   .popup-element input {
     padding: 10px 14px;
     font-size: 16px;
@@ -507,6 +521,7 @@ hr {
     font-size: 12px;
     text-align: center;
   }
+
   .popup-element.button {
     top: 204px;
   }
@@ -515,6 +530,10 @@ hr {
     padding: 10px;
     font-size: 16px;
     line-height: 24px;
+  }
+
+  .popup-element.button span{
+    height: 24px;;
   }
 }
 

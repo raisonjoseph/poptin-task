@@ -2,9 +2,9 @@
 
 $(function () {
     // Temporary storage for elements
-    let elementPositions = {};
+    let elementData = {};
     let backgroundColor = "";
-    const _ELEMENT_POSITION = "ELEMENT_POSITIONS";
+    const _ELEMENT_DATA = "ELEMENT_DATA";
     const _POPUP_BACKGROUND = "POPUP_BACKGROUND";
     const CLOSE_BUTTON = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0_711_4145)">
@@ -82,7 +82,7 @@ $(function () {
                 case "button":
                     this.customElement = `
                         <div class="popup-element custom button" data-element="${this.elementId}" style="top:${this.position.top}px; left: ${this.position.left}px">
-                            <button class="btn btn-dark">${this.value}</button>
+                            <button class="btn btn-dark"><span>${this.value}</span></button>
                             <span class="delete">${CLOSE_BUTTON}</span>
                         </div>
                     `;
@@ -96,8 +96,8 @@ $(function () {
                 stop: function (event, ui) {
                     // Add element position to temporary storage
                     const element = ui.helper.data("element");
-                    elementPositions[element] = {
-                        ...elementPositions[element],
+                    elementData[element] = {
+                        ...elementData[element],
                         ...ui.position,
                     }
                     // Update the original
@@ -111,7 +111,7 @@ $(function () {
             element.find('.delete').on('click', function () {
                 const element = $(this).parent().data('element');
                 $(`[data-element='${element}']`).remove();
-                delete elementPositions[element];
+                delete elementData[element];
             })
         }
 
@@ -123,12 +123,12 @@ $(function () {
                 this.element.append(this.customElement);
                 this.addListeners($(`[data-element='${this.elementId}']`));
             }
-            // Save custom elements to elementPositions
-            elementPositions[this.elementId] = {
+            // Save custom elements to elementData
+            elementData[this.elementId] = {
                 ...this.position,
                 isCustomElement: true,
                 elementType: this.type,
-                text: this.value,
+                value: this.value,
             }
             return this.customElement;
         }
@@ -138,27 +138,29 @@ $(function () {
      * Restores the position of elements from local storage.
      */
     function restorePositionFromStorage() {
-        const positions = JSON.parse(localStorage.getItem(_ELEMENT_POSITION));
+        const elementDetails = JSON.parse(localStorage.getItem(_ELEMENT_DATA));
         const backgroundColor = localStorage.getItem(_POPUP_BACKGROUND);
-        if (positions) {
-            for (const element in positions) {
-                const position = positions[element];
+        if (elementDetails) {
+            for (const element in elementDetails) {
+                const elementDetail = elementDetails[element];
                 $(`[data-element='${element}']`).css({
-                    top: position.top,
-                    left: position.left,
-                });
-                if (position.isCustomElement) {
-                    const customElement = new CustomElement(
-                        position.elementType,
-                        $(".popup-content"),
-                        position,
-                        element,
-                        position.text
-                    );
-                    customElement.constructElement();
-                }
+                    top: elementDetail.top,
+                    left: elementDetail.left,
+                })
+                if (elementDetail.value) $(`[data-element='${element}']`).find('span:not(.delete)').text(elementDetail.value)
+                if (elementDetail.value)
+                    if (elementDetail.isCustomElement) {
+                        const customElement = new CustomElement(
+                            elementDetail.elementType,
+                            $(".popup-content"),
+                            elementDetail,
+                            element,
+                            elementDetail.value
+                        );
+                        customElement.constructElement();
+                    }
             }
-            elementPositions = positions;
+            elementData = elementDetails;
 
         }
         if (backgroundColor) {
@@ -179,8 +181,8 @@ $(function () {
             stop: function (event, ui) {
                 // Add element position to temporary storage
                 const element = ui.helper.data("element");
-                elementPositions[element] = {
-                    ...elementPositions[element],
+                elementData[element] = {
+                    ...elementData[element],
                     ...ui.position,
                 }
                 // Update the original
@@ -198,7 +200,7 @@ $(function () {
     });
 
     $("#save").on("click", function () {
-        localStorage.setItem(_ELEMENT_POSITION, JSON.stringify(elementPositions));
+        localStorage.setItem(_ELEMENT_DATA, JSON.stringify(elementData));
         localStorage.setItem(_POPUP_BACKGROUND, backgroundColor);
     });
 
@@ -265,6 +267,37 @@ $(function () {
             backgroundColor = color
         }
     })
+
+    $(document).on("dblclick", ".editor .popup-element span:not(.delete)", function () {
+        $(this).attr("contenteditable", true).trigger('focus');
+        const parent = $(this).parent()
+        if (parent.hasClass('btn'))
+            parent.parent().draggable('disable')
+        else
+            parent.draggable('disable')
+    });
+
+    $(document).on("focusout", ".editor .popup-element span:not(.delete)", function () {
+        $this = $(this)
+        $this.attr("contenteditable", false)
+        const parent = $(this).parent()
+        let element = $this.parent().data('element');
+
+        if (parent.hasClass('btn')) {
+            parent.parent().draggable('disable')
+            element = parent.parent().data('element');
+        }
+        else
+            parent.draggable('disable')
+
+        const value = $this.text();
+
+        elementData[element] = {
+            ...elementData[element],
+            value
+        }
+        $(`[data-element='${element}']`).find('span:not(.delete)').text(value)
+    });
 
 
     restorePositionFromStorage();
