@@ -268,8 +268,17 @@ $(function () {
         }
     })
 
-    $(document).on("dblclick", ".editor .popup-element span:not(.delete)", function () {
+    $(document).on("click", ".editor .popup-element span:not(.delete)", function () {
         $(this).attr("contenteditable", true).trigger('focus');
+        // Move caret to end of the text
+        const range = document.createRange();
+        const selection = window.getSelection();
+        range.selectNodeContents(this);
+        range.collapse(false);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        // Disable draggable when editing
         const parent = $(this).parent()
         if (parent.hasClass('btn'))
             parent.parent().draggable('disable')
@@ -280,15 +289,16 @@ $(function () {
     $(document).on("focusout", ".editor .popup-element span:not(.delete)", function () {
         $this = $(this)
         $this.attr("contenteditable", false)
+
         const parent = $(this).parent()
         let element = $this.parent().data('element');
-
+        // Enable draggable when editing is done
         if (parent.hasClass('btn')) {
-            parent.parent().draggable('disable')
+            parent.parent().draggable('enable')
             element = parent.parent().data('element');
         }
         else
-            parent.draggable('disable')
+            parent.draggable('enable')
 
         const value = $this.text();
 
