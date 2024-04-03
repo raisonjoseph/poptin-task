@@ -137,7 +137,7 @@ $(function () {
     /**
      * Restores the position of elements from local storage.
      */
-    function restorePositionFromStorage() {
+    function restoreElementFromStorage() {
         const elementDetails = JSON.parse(localStorage.getItem(_ELEMENT_DATA));
         const backgroundColor = localStorage.getItem(_POPUP_BACKGROUND);
         if (elementDetails) {
@@ -213,7 +213,6 @@ $(function () {
         ev.stopPropagation();
     });
 
-
     $("#editor_popup_content").droppable({
         accept: "#editor-elements .editor-element",
         classes: {
@@ -235,9 +234,7 @@ $(function () {
         },
     });
 
-
     var $editorElements = $("#editor-elements");
-
     $(".editor-element", $editorElements).draggable({
         revert: "invalid", // when not dropped, the item will revert back to its initial position
         containment: "document",
@@ -312,6 +309,6 @@ $(function () {
     });
 
 
-    restorePositionFromStorage();
+    restoreElementFromStorage();
     addDraggableListener($(".editor .popup-element"))
 });
