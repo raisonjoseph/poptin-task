@@ -44,6 +44,11 @@ html.modal-active, body.modal-active {
   font-size: 14px;
 }
 
+.hint.note {
+  color: var(--text-color);
+  font-size: 12px;
+}
+
 .btn {
   border: none;
   outline: none;
@@ -473,7 +478,7 @@ hr {
   .editor{
     padding: 0px;
   }
-  
+
   .popup {
     aspect-ratio: 1;
     width: 100%;
