@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Draggable Elements</title>
+  <title>Popup Editor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
@@ -13,10 +13,36 @@
 
 <body>
   <div id="container" class="container">
+    <header class="header">
+      <span>Popup Editor</span>
+      <div class="btn-container">
+        <button class="btn green" id="save">Save</button>
+        <button class="btn preview" id="preview">Preview</button>
+      </div>
+    </header>
     <div class="editor-container">
+      <div class="editor-tools">
+
+        <span class="hint">Elements</span>
+        <div id="editor-elements" class="editor-elements">
+          <div class="editor-element" data-type="text">
+            Text
+          </div>
+          <div class="editor-element" data-type="image">
+            Image
+          </div>
+          <div class="editor-element" data-type="button">
+            Button
+          </div>
+        </div>
+        <hr>
+        <span class="hint">Background Color</span>
+        <input id="color-picker" type="color" class="color-picker" value="#E17A5F" />
+      </div>
+
       <div class="editor">
         <div class="editor-content">
-          <div class="popup">
+          <div class="popup hidden">
             <div id="editor_popup_content" class="popup-content">
               <div class="stars popup-element" data-element="stars">
                 <svg width="192" height="64" viewBox="0 0 192 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -62,21 +88,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="btn-container">
-          <button class="btn green" id="save">Save</button>
-          <button class="btn preview" id="preview">Preview</button>
-        </div>
-      </div>
-      <div id="editor-elements" class="editor-elements">
-        <div class="editor-element" data-type="text">
-          Text
-        </div>
-        <div class="editor-element" data-type="image">
-          Image
-        </div>
-        <div class="editor-element" data-type="button">
-          Button
         </div>
       </div>
     </div>
