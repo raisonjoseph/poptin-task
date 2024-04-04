@@ -65,7 +65,7 @@ $(function () {
                 case "text":
                     this.customElement = `
                         <div class="popup-element custom title" data-element="${this.elementId}" style="top:${this.position.top}px; left: ${this.position.left}px">
-                            <span>${this.value}</span>
+                            <span contenteditable="true">${this.value}</span>
                             <span class="delete">${CLOSE_BUTTON}</span>
                             
                         </div>`;
@@ -82,7 +82,7 @@ $(function () {
                 case "button":
                     this.customElement = `
                         <div class="popup-element custom button" data-element="${this.elementId}" style="top:${this.position.top}px; left: ${this.position.left}px">
-                            <button class="btn btn-dark"><span>${this.value}</span></button>
+                            <button class="btn btn-dark"><span contenteditable="true">${this.value}</span></button>
                             <span class="delete">${CLOSE_BUTTON}</span>
                         </div>
                     `;
@@ -190,6 +190,8 @@ $(function () {
                     top: ui.position.top,
                     left: ui.position.left,
                 }).addClass('dragged');
+
+                $(this).data('preventBehaviour', true);
             },
         });
     }
@@ -256,7 +258,7 @@ $(function () {
         cursor: "move",
     });
 
-    $('#color-picker').on('change', function () {
+    $('#color-picker').on('input', function () {
         const color = $(this).val();
         // Check if the color is valid
         if (/^#[0-9A-F]{6}$/i.test(color)) {
@@ -265,30 +267,39 @@ $(function () {
         }
     })
 
-    // Add click event to the popup content to enable editing
-    $(document).on("click", ".editor .popup-element span:not(.delete)", function () {
-        $(this).attr("contenteditable", true).trigger('focus');
-        // Move caret to end of the text
-        const range = document.createRange();
-        const selection = window.getSelection();
-        range.selectNodeContents(this);
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
+    // Add an extra event lister for input fields and button to prevent default behaviour and allow dragging
+    $(document).on('mousedown', '.editor .popup-element button, .editor .popup-element input', function (e) {
+        var mdown = new MouseEvent("mousedown", {
+            screenX: e.screenX,
+            screenY: e.screenY,
+            clientX: e.clientX,
+            clientY: e.clientY,
+            view: window
+        });
+        $(this).parent()[0].dispatchEvent(mdown);
+    }).on('click', '.editor .popup-element button, .editor .popup-element input', function (e) {
+        var $draggable = $(this).closest('.editor .popup-element');
+        if ($draggable.data("preventBehaviour")) {
+            e.preventDefault();
+            $draggable.data("preventBehaviour", false)
+        }
+    });
 
+    // Add click event to the popup content to enable editing
+    $(document).on("click", ".editor .popup-element span:not(.delete)", function (ev) {
         // Disable draggable when editing
         const parent = $(this).parent()
         if (parent.hasClass('btn'))
             parent.parent().draggable('disable')
         else
             parent.draggable('disable')
+        $(this).trigger('focus');
+
     });
 
     // Add focusout event to the popup content to disable editing
     $(document).on("focusout", ".editor .popup-element span:not(.delete)", function () {
         $this = $(this)
-        $this.attr("contenteditable", false)
-
         const parent = $(this).parent()
         let element = $this.parent().data('element');
         // Enable draggable when editing is done
